@@ -8,3 +8,24 @@ variable "vpc_name" {
   type        = string
   description = "name for main vpc"
 }
+
+variable "availability_zones" {
+  type        = list(string)
+  description = "availability zone list"
+}
+
+variable "public_subnet_cidrs" {
+  type        = list(string)
+  description = "cidr values for public subnet"
+}
+
+variable "private_subnet_cidrs" {
+  type        = list(string)
+  description = "cidr values for ptivate subnet"
+}
+
+variable "enable_NAT_gateway" {
+  type        = bool
+  description = "NAT gateway available or not"
+  default     = false
+}
