@@ -14,10 +14,10 @@ variable "availability_zones" {
   description = "availability zone list"
 }
 
-variable "public_subnet_cidrs" {
-  type        = list(string)
-  description = "cidr values for public subnet"
-}
+# variable "public_subnet_cidrs" {
+#   type        = list(string)
+#   description = "cidr values for public subnet"
+# }
 
 variable "private_subnet_cidrs" {
   type        = list(string)
