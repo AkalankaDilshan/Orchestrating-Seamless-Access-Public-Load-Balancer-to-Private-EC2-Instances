@@ -14,11 +14,13 @@ data "aws_ami" "latest_ami" {
 }
 
 resource "aws_instance" "server_instance" {
-  ami                    = data.aws_ami.latest_ami.id
-  instance_type          = var.instance_type
-  subnet_id              = var.subnet_id
-  vpc_security_group_ids = [var.vpc_security_group_id]
-  user_data              = templatefile("init-script.sh")
+  ami                     = data.aws_ami.latest_ami.id
+  instance_type           = var.instance_type
+  subnet_id               = var.subnet_id
+  vpc_security_group_ids  = [var.vpc_security_group_id]
+  user_data               = templatefile("init-script.sh")
+  disable_api_termination = false
+  ebs_optimized           = false
   root_block_device {
     volume_type = var.ebs_volume_type
     volume_size = var.ebs_volume_type
@@ -27,6 +29,7 @@ resource "aws_instance" "server_instance" {
 
   key_name = var.key_pair_name
 
+  depends_on = var.resource_dependencies
   tags = {
     Name = var.instance_name
   }
