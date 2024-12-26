@@ -18,7 +18,7 @@ resource "aws_instance" "server_instance" {
   instance_type           = var.instance_type
   subnet_id               = var.subnet_id
   vpc_security_group_ids  = [var.vpc_security_group_id]
-  user_data               = templatefile("init-script.sh")
+  user_data               = templatefile("init-script.sh", {})
   disable_api_termination = false
   ebs_optimized           = false
   root_block_device {
