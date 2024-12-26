@@ -23,7 +23,7 @@ resource "aws_instance" "server_instance" {
   ebs_optimized           = false
   root_block_device {
     volume_type = var.ebs_volume_type
-    volume_size = var.ebs_volume_type
+    volume_size = var.ebs_volume_size
     encrypted   = true
   }
 
