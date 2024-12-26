@@ -36,8 +36,8 @@ jobs:
         run: terraform init
 
       #Terraform queries the actual infrastructure to update the state file with the current resource configurations.
-      - name: Terraform Refresh
-        run: terraform refresh
+      # - name: Terraform Refresh
+      #   run: terraform refresh
 
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format

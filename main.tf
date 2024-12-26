@@ -26,8 +26,8 @@ module "backend_instance_blue" {
   source                = "./modules/ec2"
   instance_name         = "blue_instance"
   instance_type         = "t3.micro"
-  subnet_id             = module.main_vpc.private_subnet_id[0].id
-  vpc_security_group_id = module.ec2_security_group.ec2_sg_id[0].id
+  subnet_id             = module.main_vpc.private_subnet_id[0]
+  vpc_security_group_id = module.ec2_security_group.ec2_sg_id[0]
   ebs_volume_size       = 8
   ebs_volume_type       = "gp2"
   key_pair_name         = module.key_pair.key_pair_name
@@ -38,8 +38,8 @@ module "backend_instance_green" {
   source                = "./modules/ec2"
   instance_name         = "green_instance"
   instance_type         = "t3.micro"
-  subnet_id             = module.main_vpc.private_subnet_id[1].id
-  vpc_security_group_id = module.ec2_security_group.ec2_sg_id[1].id
+  subnet_id             = module.main_vpc.private_subnet_id[1]
+  vpc_security_group_id = module.ec2_security_group.ec2_sg_id[1]
   ebs_volume_size       = 8
   ebs_volume_type       = "gp2"
   key_pair_name         = module.key_pair.key_pair_name
