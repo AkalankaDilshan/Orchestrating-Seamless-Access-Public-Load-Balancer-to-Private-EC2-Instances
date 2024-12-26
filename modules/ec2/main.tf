@@ -29,7 +29,7 @@ resource "aws_instance" "server_instance" {
 
   key_name = var.key_pair_name
 
-  depends_on = var.depends_on
+  # depends_on = var.depends_on
   tags = {
     Name = var.instance_name
   }

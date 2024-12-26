@@ -34,8 +34,8 @@ variable "key_pair_name" {
   description = "name for ec2 instance key-pair"
 }
 
-variable "depends_on" {
-  type        = list(any)
-  description = "List of resources that need to be created before this one."
-  # default     = [aws_key_pair.ssh, aws_security_group.securitygroup]
-}
+# variable "resource_dependencies" {
+#   type        = list(any)
+#   description = "List of resources that need to be created before this one."
+#   # default     = [aws_key_pair.ssh, aws_security_group.securitygroup]
+# }
