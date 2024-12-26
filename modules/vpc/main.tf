@@ -14,7 +14,7 @@ resource "aws_subnet" "public_subnet" {
   availability_zone       = element(var.availability_zones, count.index)
   map_public_ip_on_launch = true
   tags = {
-    Name = "private subnet ${count.index + 1}"
+    Name = "public subnet ${count.index + 1}"
   }
 }
 resource "aws_subnet" "private_subnet" {
@@ -49,7 +49,7 @@ resource "aws_route" "public_route" {
 resource "aws_route_table_association" "public_rt_association" {
   count          = length(aws_subnet.public_subnet)
   subnet_id      = aws_subnet.public_subnet[count.index].id
-  route_table_id = aws_route_table.public_rt
+  route_table_id = aws_route_table.public_rt.id
 }
 
 # VPC Route Table Section - private route
@@ -60,7 +60,7 @@ resource "aws_route_table" "private_rt" {
   }
 }
 resource "aws_eip" "elastic_IP_address" {
-  count  = 2
+  count  = length(var.private_subnet_cidrs)
   domain = "vpc"
   tags = {
     Name = "${var.vpc_name}-vpc-nat_gateway-EIP"
@@ -69,7 +69,7 @@ resource "aws_eip" "elastic_IP_address" {
 resource "aws_nat_gateway" "nat_gateway" {
   count         = length(var.private_subnet_cidrs)
   allocation_id = aws_eip.elastic_IP_address[count.index].id
-  subnet_id     = element(aws_subnet.private_subnet[*].id, 0)
+  subnet_id     = element(aws_subnet.public_subnet[*].id)
 }
 
 resource "aws_route" "private_route" {
@@ -81,7 +81,7 @@ resource "aws_route" "private_route" {
 
 resource "aws_route_table_association" "private_RT_association" {
   count          = length(aws_subnet.private_subnet)
-  subnet_id      = aws_subnet.private_subnet[count.index].index
+  subnet_id      = aws_subnet.private_subnet[count.index].id
   route_table_id = aws_route.private_route.id
 }
 
