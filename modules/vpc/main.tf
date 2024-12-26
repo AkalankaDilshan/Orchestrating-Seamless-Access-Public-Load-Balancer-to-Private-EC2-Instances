@@ -6,6 +6,17 @@ resource "aws_vpc" "main" {
     Name = var.vpc_name
   }
 }
+
+resource "aws_subnet" "public_subnet" {
+  count                   = length(var.private_subnet_cidrs)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = element(var.private_subnet_cidrs, count.index)
+  availability_zone       = element(var.availability_zones, count.index)
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "private subnet ${count.index + 1}"
+  }
+}
 resource "aws_subnet" "private_subnet" {
   count             = length(var.private_subnet_cidrs)
   vpc_id            = aws_vpc.main.id
@@ -15,8 +26,39 @@ resource "aws_subnet" "private_subnet" {
     Name = "private subnet ${count.index + 1}"
   }
 }
+# VPC Route Table Section - public route
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "${var.vpc_name}-public-route-table"
+  }
+}
 
-# VPC Route Table Section
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "${var.vpc_name}-igw"
+  }
+}
+resource "aws_route" "public_route" {
+  route_table_id         = aws_route_table.public_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
+}
+
+resource "aws_route_table_association" "public_rt_association" {
+  count          = length(aws_subnet.public_subnet)
+  subnet_id      = aws_subnet.public_subnet[count.index].id
+  route_table_id = aws_route_table.public_rt
+}
+
+# VPC Route Table Section - private route
+resource "aws_route_table" "private_rt" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "${var.vpc_name}-private-route-table"
+  }
+}
 resource "aws_eip" "elastic_IP_address" {
   count  = 2
   domain = "vpc"
@@ -25,16 +67,9 @@ resource "aws_eip" "elastic_IP_address" {
   }
 }
 resource "aws_nat_gateway" "nat_gateway" {
-  count         = 2
+  count         = length(var.private_subnet_cidrs)
   allocation_id = aws_eip.elastic_IP_address[count.index].id
   subnet_id     = element(aws_subnet.private_subnet[*].id, 0)
-}
-
-resource "aws_route_table" "private_rt" {
-  vpc_id = aws_vpc.main.id
-  tags = {
-    Name = "${var.vpc_name}-private-route-table"
-  }
 }
 
 resource "aws_route" "private_route" {
@@ -51,14 +86,7 @@ resource "aws_route_table_association" "private_RT_association" {
 }
 
 # Network ACL Section
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
-  tags = {
-    Name = "${var.vpc_name}-igw"
-  }
-}
-
-resource "aws_network_acl" "private_ACL" {
+resource "aws_network_acl" "vpc_ACL" {
   vpc_id = aws_vpc.main.id
   tags = {
     Name = "${var.vpc_name}-NACL"
@@ -66,7 +94,7 @@ resource "aws_network_acl" "private_ACL" {
 }
 
 resource "aws_network_acl_rule" "public_ssh_inbound" {
-  network_acl_id = aws_network_acl.private_ACL.id
+  network_acl_id = aws_network_acl.vpc_ACL.id
   rule_number    = 100
   rule_action    = "allow"
   protocol       = "6"
@@ -77,7 +105,7 @@ resource "aws_network_acl_rule" "public_ssh_inbound" {
 }
 
 resource "aws_network_acl_rule" "public_ssh_outbound" {
-  network_acl_id = aws_network_acl.private_ACL.id
+  network_acl_id = aws_network_acl.vpc_ACL.id
   rule_number    = 100
   rule_action    = "allow"
   protocol       = "6"
@@ -88,7 +116,7 @@ resource "aws_network_acl_rule" "public_ssh_outbound" {
 }
 
 resource "aws_network_acl_rule" "public_all_outbound" {
-  network_acl_id = aws_network_acl.private_ACL.id
+  network_acl_id = aws_network_acl.vpc_ACL.id
   rule_number    = 200
   rule_action    = "allow"
   protocol       = "-1"
@@ -97,7 +125,7 @@ resource "aws_network_acl_rule" "public_all_outbound" {
 }
 
 resource "aws_network_acl_rule" "public_deny_all_inbound" {
-  network_acl_id = aws_network_acl.private_ACL.id
+  network_acl_id = aws_network_acl.vpc_ACL.id
   rule_number    = 300
   rule_action    = "deny"
   protocol       = "-1"
