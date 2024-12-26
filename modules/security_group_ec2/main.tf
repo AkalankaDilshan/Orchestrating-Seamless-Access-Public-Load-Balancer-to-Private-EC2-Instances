@@ -13,7 +13,7 @@ resource "aws_security_group_rule" "allow_ssh" {
   from_port         = 22
   to_port           = 22
   protocol          = "tcp"
-  cidr_blocks       = var.nat_gateway_eip
+  cidr_blocks       = ["$var.nat_gateway_eip"]
   security_group_id = aws_security_group.server_sg.id
 }
 
@@ -23,7 +23,7 @@ resource "aws_security_group_rule" "allow_http" {
   from_port         = 80
   to_port           = 80
   protocol          = "tcp"
-  cidr_blocks       = var.nat_gateway_eip
+  cidr_blocks       = ["$var.nat_gateway_eip"]
   security_group_id = aws_security_group.server_sg.id
 }
 
@@ -33,7 +33,7 @@ resource "aws_security_group_rule" "allow_https" {
   from_port         = 443
   to_port           = 443
   protocol          = "tcp"
-  cidr_blocks       = var.nat_gateway_eip
+  cidr_blocks       = ["$var.nat_gateway_eip"]
   security_group_id = aws_security_group.server_sg.id
 }
 
