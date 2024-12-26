@@ -69,7 +69,7 @@ resource "aws_eip" "elastic_IP_address" {
 resource "aws_nat_gateway" "nat_gateway" {
   count         = length(var.private_subnet_cidrs)
   allocation_id = aws_eip.elastic_IP_address[count.index].id
-  subnet_id     = element(aws_subnet.public_subnet[*].id)
+  subnet_id     = element(aws_subnet.public_subnet[*].id, 0, count)
 }
 
 resource "aws_route" "private_route" {
