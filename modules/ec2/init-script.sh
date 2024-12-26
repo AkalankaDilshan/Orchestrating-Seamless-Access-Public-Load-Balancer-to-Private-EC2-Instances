@@ -1,6 +1,7 @@
 #!/bin/bash
 #Author : M.K.Akalanka Dilshan
 #Date : 2024-12-26
+#Time : 17.18
 
 sudo yum update -y
 
