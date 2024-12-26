@@ -15,5 +15,5 @@ module "ec2_security_group" {
   source          = "./modules/security_group_ec2"
   sg_name         = "server_sg"
   vpc_id          = module.main_vpc.vpc_id
-  nat_gateway_eip = flatten([module.main_vpc.nat_gateway_eip])
+  nat_gateway_eip = [flatten([module.main_vpc.nat_gateway_eip])]
 }
