@@ -1,9 +1,12 @@
 #!/bin/bash
-#Author : M.K.Akalanka Dilshan
-#Date : 2024-12-26
-#Time : 17.18
+#!/bin/bash
+# Author: M.K.Akalanka Dilshan
+# Date: 2024-12-27
+# Time: 21.25
+
 
 sudo yum update -y
+
 
 sudo yum install -y httpd
 sudo systemctl start httpd
@@ -13,12 +16,20 @@ sudo systemctl enable httpd
 AZ=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
 
 
+if [ "$AZ" == "eu-north-1b" ]; then
+    BG_COLOR="yellow"
+elif [ "$AZ" == "eu-north-1a" ]; then
+    BG_COLOR="green"
+else
+    BG_COLOR="lightgreen" 
+fi
+
 echo "<!DOCTYPE html>
 <html>
 <head>
     <title>Availability Zone</title>
 </head>
-<body style='background-color:lightgreen; color:black; text-align:center;'>
+<body style='background-color:$BG_COLOR; color:black; text-align:center;'>
     <h1>I'm in the $AZ Availability Zone</h1>
 </body>
 </html>" | sudo tee /var/www/html/index.html
