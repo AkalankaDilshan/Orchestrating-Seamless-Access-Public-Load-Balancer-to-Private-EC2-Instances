@@ -25,10 +25,15 @@ variable "health_check_path" {
 #   description = "List of public subnet ids for NAT gateway"
 # }
 
+variable "load_balancer_type" {
+  type        = string
+  description = "lb type like application,network etc"
+  default     = "application"
+}
 variable "target_group_type" {
   type        = string
   description = "the type for taget group"
-  default     = "instance" #instance,ip,lambda
+  # default     = "instance" #instance,ip,lambda
 }
 
 variable "target_ids" {
