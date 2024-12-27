@@ -17,9 +17,9 @@ AZ=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone
 
 
 if [ "$AZ" == "eu-north-1b" ]; then
-    BG_COLOR="yellow"
+    BG_COLOR="powderblue"
 elif [ "$AZ" == "eu-north-1a" ]; then
-    BG_COLOR="green"
+    BG_COLOR="lightgreen"
 else
     BG_COLOR="lightgreen" 
 fi
