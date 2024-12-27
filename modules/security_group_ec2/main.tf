@@ -7,6 +7,28 @@ resource "aws_security_group" "server_sg" {
   }
 }
 
+#connecte with load balancer
+resource "aws_security_group_rule" "allow_ssh" {
+  type              = "ingress"
+  description       = "SSH ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.server_sg.id
+}
+
+resource "aws_security_group_rule" "allow_http" {
+  type              = "ingress"
+  description       = "HTTP ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.server_sg.id
+}
+
+#communicate for NAT gateway
 resource "aws_security_group_rule" "allow_ssh" {
   type              = "ingress"
   description       = ""
