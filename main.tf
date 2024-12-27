@@ -58,7 +58,7 @@ module "application_load_balancer" {
   vpc_id             = module.main_vpc.vpc_id
   alb_subnet_id      = flatten([module.main_vpc.public_subnet_id])
   target_group_type  = "instance"
-  target_ids         = [module.backend_instance_blue.instance_id, module.backend_instance_green.instance_id]
+  target_ids         = [module.backend_instance_blue.instance_private_ip, module.backend_instance_green.instance_private_ip]
   security_group_id  = module.application_load_balancer_sg.alb_security_group_id
   depends_on         = [module.backend_instance_blue, module.backend_instance_green]
 
