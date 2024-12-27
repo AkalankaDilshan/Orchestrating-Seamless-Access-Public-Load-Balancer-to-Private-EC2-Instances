@@ -21,3 +21,7 @@ output "nat_gateway_eip" {
 output "nat_gateway_ids" {
   value = [aws_nat_gateway.nat_gateway[*].id]
 }
+
+output "nat_gateway_allocation_ids" {
+  value = aws_nat_gateway.nat_gateway[*].allocation_id
+}
