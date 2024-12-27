@@ -8,7 +8,7 @@ resource "aws_security_group" "server_sg" {
 }
 
 #connecte with load balancer
-resource "aws_security_group_rule" "allow_ssh" {
+resource "aws_security_group_rule" "allow_ssh_lb" {
   type              = "ingress"
   description       = "SSH ingress"
   from_port         = 22
@@ -18,7 +18,7 @@ resource "aws_security_group_rule" "allow_ssh" {
   security_group_id = aws_security_group.server_sg.id
 }
 
-resource "aws_security_group_rule" "allow_http" {
+resource "aws_security_group_rule" "allow_http_lb" {
   type              = "ingress"
   description       = "HTTP ingress"
   from_port         = 80
