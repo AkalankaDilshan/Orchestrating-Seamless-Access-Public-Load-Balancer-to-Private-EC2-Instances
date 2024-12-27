@@ -17,3 +17,7 @@ output "private_subnet_id" {
 output "nat_gateway_eip" {
   value = [aws_nat_gateway.nat_gateway[*].public_ip]
 }
+
+output "nat_gateway_ips" {
+  value = [aws_nat_gateway.nat_gateway[*].id]
+}
