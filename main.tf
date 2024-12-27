@@ -24,13 +24,16 @@ module "application_load_balancer_sg" {
 }
 
 module "application_load_balancer" {
-  source            = "./modules/application_load_balancer"
-  alb_name          = "app-load-balancer"
-  vpc_id            = module.main_vpc.vpc_id
-  public_subnet_ids = flatten([module.main_vpc.public_subnet_id])
+  source   = "./modules/application_load_balancer"
+  alb_name = "app-load-balancer"
+  vpc_id   = module.main_vpc.vpc_id
+  # public_subnet_ids = flatten([module.main_vpc.public_subnet_id])
+  # alb_subnet_id     = module.main_vpc.public_subnet_id[0]
+  public_subnet_ids = module.main_vpc.public_subnet_id[0]
+  alb_subnet_id     = flatten([module.main_vpc.public_subnet_id])
   target_ids        = flatten([module.main_vpc.nat_gateway_ids])
   security_group_id = module.application_load_balancer_sg.alb_security_group_id
-  alb_subnet_id     = module.main_vpc.public_subnet_id[0]
+
 }
 module "key_pair" {
   source = "./modules/key-pair"
