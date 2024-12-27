@@ -7,7 +7,7 @@ variable "alb_name" {
   description = "name for Application load balancer"
 }
 variable "alb_subnet_id" {
-  type        = string
+  type        = list(string)
   description = "id for alb subnet"
 }
 variable "security_group_id" {
@@ -20,10 +20,10 @@ variable "health_check_path" {
   default     = "/"
 }
 
-variable "public_subnet_ids" {
-  type        = list(string)
-  description = "List of public subnet ids for NAT gateway"
-}
+# variable "public_subnet_ids" {
+#   type        = list(string)
+#   description = "List of public subnet ids for NAT gateway"
+# }
 
 variable "target_group_type" {
   type        = string
