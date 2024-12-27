@@ -31,7 +31,7 @@ module "application_load_balancer" {
   # alb_subnet_id     = module.main_vpc.public_subnet_id[0]
   # public_subnet_ids = module.main_vpc.public_subnet_id[0]
   alb_subnet_id     = flatten([module.main_vpc.public_subnet_id])
-  target_ids        = flatten([module.main_vpc.nat_gateway_ids])
+  target_ids        = flatten([module.main_vpc.nat_gateway_eip])
   security_group_id = module.application_load_balancer_sg.alb_security_group_id
 
 }
