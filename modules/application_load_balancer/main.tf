@@ -12,7 +12,6 @@ resource "aws_lb" "application_load_balancer" {
   }
 }
 
-
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.application_load_balancer.arn
   port              = 80
