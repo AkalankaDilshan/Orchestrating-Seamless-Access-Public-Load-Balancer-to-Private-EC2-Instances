@@ -18,6 +18,20 @@ module "ec2_security_group" {
   nat_gateway_eip = flatten([module.main_vpc.nat_gateway_eip])
 }
 
+module "application_load_balancer_sg" {
+  source = "./modules/security_group_alb"
+  vpc_id = module.main_vpc.vpc_id
+}
+
+module "application_load_balancer" {
+  source            = "./modules/application_load_balancer"
+  alb_name          = "app_load_balancer"
+  vpc_id            = module.main_vpc.vpc_id
+  public_subnet_ids = [module.main_vpc.public_subnet_id[0]]
+  taget_ids         = flatten([module.main_vpc.nat_gateway_ips])
+  security_group_id = module.application_load_balancer_sg.alb_security_group_id
+  alb_subnet_id     = module.main_vpc.public_subnet_id[0]
+}
 module "key_pair" {
   source = "./modules/key-pair"
 }
