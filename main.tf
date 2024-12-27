@@ -25,7 +25,7 @@ module "application_load_balancer_sg" {
 
 module "application_load_balancer" {
   source            = "./modules/application_load_balancer"
-  alb_name          = "app_load_balancer"
+  alb_name          = "app-load-balancer"
   vpc_id            = module.main_vpc.vpc_id
   public_subnet_ids = [module.main_vpc.public_subnet_id[0]]
   taget_ids         = flatten([module.main_vpc.nat_gateway_ips])

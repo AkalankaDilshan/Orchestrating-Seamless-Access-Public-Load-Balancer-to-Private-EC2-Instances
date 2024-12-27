@@ -23,7 +23,7 @@ resource "aws_lb_listener" "http" {
   }
 }
 resource "aws_lb_target_group" "tg" {
-  name        = var.alb_name
+  name        = "${var.alb_name}-tg"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
@@ -39,7 +39,7 @@ resource "aws_lb_target_group" "tg" {
   }
 
   tags = {
-    Name = var.alb_name
+    Name = "${var.alb_name}-tg"
   }
 }
 
