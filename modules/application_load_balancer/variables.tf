@@ -31,7 +31,7 @@ variable "target_group_type" {
   default     = "instance" #instance,ip,lambda
 }
 
-variable "taget_ids" {
+variable "target_ids" {
   type        = list(string)
   description = "List of target ids"
 }

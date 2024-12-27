@@ -18,6 +18,6 @@ output "nat_gateway_eip" {
   value = [aws_nat_gateway.nat_gateway[*].public_ip]
 }
 
-output "nat_gateway_ips" {
+output "nat_gateway_ids" {
   value = [aws_nat_gateway.nat_gateway[*].id]
 }
