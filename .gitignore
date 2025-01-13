@@ -2,7 +2,7 @@
 **/.terraform/*
 
 #architecture resources
-res2/*
+res/*
 # .tfstate files
 *.tfstate
 *.tfstate.*
